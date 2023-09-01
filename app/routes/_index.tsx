@@ -14,7 +14,7 @@ export const meta: V2_MetaFunction = () => {
     ];
 };
 
-const publicPath = `${process.env.PUBLIC_PATH || ''}urls.json`
+const publicPath = `${process.env.PUBLIC_PATH || ''}/urls.json`
 
 export async function action({request}: ActionArgs) {
     let urlMappings: { [index: string]: string } = {};
