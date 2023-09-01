@@ -1,11 +1,12 @@
-import {useParams} from "@remix-run/react";
 import fs from "fs";
 import {LoaderArgs, redirect} from "@remix-run/node";
 
+import 'dotenv/config'
+const publicPath = `${process.env.PUBLIC_PATH}urls.json`
 export const loader = ({params}:LoaderArgs) => {
     let urlMappings: { [index: string]: string } = {};
     try {
-        const data = fs.readFileSync('public/urls.json', 'utf8');
+        const data = fs.readFileSync(publicPath, 'utf8');
         urlMappings = JSON.parse(data);
     } catch (error) {
         console.error('Error reading URL mappings:', error);

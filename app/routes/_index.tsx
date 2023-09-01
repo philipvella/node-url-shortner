@@ -5,6 +5,7 @@ import {Form, useActionData} from "@remix-run/react";
 import {json} from "@remix-run/node";
 import shortid from "shortid";
 import fs from "fs";
+import 'dotenv/config'
 
 export const meta: V2_MetaFunction = () => {
     return [
@@ -13,10 +14,12 @@ export const meta: V2_MetaFunction = () => {
     ];
 };
 
+const publicPath = `${process.env.PUBLIC_PATH}urls.json`
+
 export async function action({request}: ActionArgs) {
     let urlMappings: { [index: string]: string } = {};
     try {
-        const data = fs.readFileSync('public/urls.json', 'utf8');
+        const data = fs.readFileSync(publicPath, 'utf8');
         urlMappings = JSON.parse(data);
     } catch (error) {
         console.error('Error reading URL mappings:', error);
@@ -28,7 +31,7 @@ export async function action({request}: ActionArgs) {
     const originalUrl: string = `${url}`;
     const shortUrl = shortid.generate();
     urlMappings[shortUrl] = originalUrl;
-    fs.writeFileSync('public/urls.json', JSON.stringify(urlMappings), 'utf8');
+    fs.writeFileSync(publicPath, JSON.stringify(urlMappings), 'utf8');
 
     return json({url: `${request.headers.get('origin')}/l/${shortUrl}`});
 }
