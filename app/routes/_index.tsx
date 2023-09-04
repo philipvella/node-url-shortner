@@ -4,8 +4,8 @@ import {Box} from "@mui/system";
 import {Form, useActionData} from "@remix-run/react";
 import {json} from "@remix-run/node";
 import shortid from "shortid";
-import fs from "fs";
-import 'dotenv/config'
+import {db} from "~/routes/firebase";
+import {addDoc, collection} from 'firebase/firestore/lite';
 
 export const meta: V2_MetaFunction = () => {
     return [
@@ -14,34 +14,25 @@ export const meta: V2_MetaFunction = () => {
     ];
 };
 
-const publicPath = `${process.env.PUBLIC_PATH || ''}/urls.json`
-
 export async function action({request}: ActionArgs) {
-    let urlMappings: { [index: string]: string } = {};
-    try {
-        const data = fs.readFileSync(publicPath, 'utf8');
-        urlMappings = JSON.parse(data);
-    } catch (error) {
-        console.error('Error reading URL mappings:', error);
-    }
-
     const body = await request.formData();
     const url = body.get("url");
 
     const originalUrl: string = `${url}`;
     const shortUrl = shortid.generate();
-    urlMappings[shortUrl] = originalUrl;
-    fs.writeFileSync(publicPath, JSON.stringify(urlMappings), 'utf8');
 
-    return json({url: `${request.headers.get('origin')}/l/${shortUrl}`});
+    const docRef = await addDoc(collection(db, 'urls'), {long: originalUrl, short: shortUrl});
+    console.log("Document written with ID: ", docRef.id);
+
+    return json({url: `${request.headers.get('origin')}/${shortUrl}`});
+
+
 }
 
-
 export default function Index() {
-    const data = useActionData<typeof action>();
-    console.log({data});
+    const actionData = useActionData<typeof action>();
     return (
-        <Box sx={{flexGrow: 1}}>
+        <Box sx={{flexGrow: 1, textAlign:"center"}}>
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
@@ -51,11 +42,15 @@ export default function Index() {
             </AppBar>
             <Paper variant="outlined" sx={{padding: 3}}>
                 <Form method="post">
-                    <TextField fullWidth label="Enter Url" name="url" required type="url"/>
-                    <Button type="submit" variant="contained">Shorten</Button>
+                    <TextField fullWidth placeholder="Enter Url" name="url" required type="url" sx={{marginBottom: 2}}/>
+
+                    <Button type="submit" variant="contained">Shorten Url</Button>
                 </Form>
+
+                <Typography variant="body1"  sx={{marginTop: 2}}>
+                    {actionData && (<a href={actionData.url}>{actionData.url}</a>)}
+                </Typography>
             </Paper>
-            {data && (<a href={data.url}>{data.url}</a>)}
         </Box>
 
     );
