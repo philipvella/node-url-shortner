@@ -1,58 +1,51 @@
-# Welcome to Remix!
+# Project Node URL Shortener
 
-- [Remix Docs](https://remix.run/docs)
+This repository contains the following NPM scripts to help you manage and develop your project.
 
-## Development
+## Available Scripts
 
-From your terminal:
+In the project directory, you can run:
 
-```sh
-npm run dev
-```
+### `npm run build`
 
-This starts your app in development mode, rebuilding assets on file changes.
+This script runs the Remix build process to compile and bundle your application for production deployment. It generates optimized assets in the `build` directory.
 
-## Deployment
-
-First, build your app for production:
-
-```sh
+```bash
 npm run build
 ```
 
-Then run the app in production mode:
+### `npm run dev`
 
-```sh
+Use this script to start the Remix development server. It allows you to work on your project with hot module reloading and other development features.
+
+```bash
+npm run dev
+```
+
+### `npm start`
+
+This script serves the built Remix application using `remix-serve`. It's useful for testing your production-ready application locally.
+
+```bash
 npm start
 ```
 
-Now you'll need to pick a host to deploy it to.
+### `npm run typecheck`
 
-### DIY
+This script runs TypeScript's type checking on your project's codebase. It helps catch type-related errors early in your development process.
 
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
-
-### Using a Template
-
-When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over relevant code/assets from your current app to the new project that's pre-configured for your target server.
-
-Most importantly, this means everything in the `app/` directory, but if you've further customized your current application outside of there it may also include:
-
-- Any assets you've added/updated in `public/`
-- Any updated versions of root files such as `.eslintrc.js`, etc.
-
-```sh
-cd ..
-# create a new project, and pick a pre-configured host
-npx create-remix@latest
-cd my-new-remix-app
-# remove the new project's app (not the old one!)
-rm -rf app
-# copy your app over
-cp -R ../my-old-remix-app/app app
+```bash
+npm run typecheck
 ```
+
+## Usage
+
+To use these scripts, open your terminal and navigate to the project directory. Then, run the desired script using the `npm run` command followed by the script name. For example, to build your project, you would run:
+
+```bash
+npm run build
+```
+
+## License
+
+This project is licensed under the MIT License (Open source).
