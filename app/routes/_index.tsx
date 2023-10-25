@@ -10,7 +10,7 @@ import validUrl from 'valid-url';
 
 export const meta: V2_MetaFunction = () => {
     return [
-        {title: "New Remix App"},
+        {title: "Philip's URL Shortner (v1.0.0)"},
         {name: "description", content: "Welcome to Remix!"},
     ];
 };
